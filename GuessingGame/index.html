@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Higher Lower</title>
+  </head>
+  <body>
+    <h3>Higher-Lower</h3>
+    <p>Guess a number between 1 and <span id="max"></span>.</p>
+    <p>Your Guess:</p>
+    <input type="number" />
+    <br />
+    <button>Guess</button>
+    <div id="results"></div>
+  </body>
+</html>
+<script>
+  let max = "no";
+  while (isNaN(max) || max <= 0) {
+    max = Number(prompt("What should the maximum number be?"));
+  }
+  let maxEl = document.querySelector("#max");
+  max = Math.round(max);
+  maxEl.innerText = max;
+
+  let randomNumber = Math.ceil(Math.random() * max) || 1;
+  console.log(randomNumber);
+  let button = document.querySelector("button");
+  let input = document.querySelector("input");
+
+  let results = document.querySelector("#results");
+  let guesses = [];
+  button.onclick = function () {
+    let value = Number(input.value);
+    switch (true) {
+      case input.value.length === 0:
+        results.innerText = "That is not a number!";
+        break;
+      case value === randomNumber:
+        guesses.push(value);
+        results.innerText =
+          "You got it! It took " +
+          guesses.length +
+          " tries and your guesses were " +
+          guesses;
+
+        //continue play
+        randomNumber = Math.round(Math.random() * max);
+        console.log(randomNumber);
+        input.value = "";
+        break;
+      case guesses.includes(value):
+        results.innerText = "You already guessed this number.";
+        break;
+      case value < 1 || value > max:
+        results.innerText = "That number is not in range, try again.";
+        break;
+      case value > randomNumber:
+        results.innerText = "No, try a lower number.";
+        guesses.push(value);
+        break;
+      case value < randomNumber:
+        results.innerText = "No, try a higher number.";
+        guesses.push(value);
+        break;
+    }
+  };
+</script>
